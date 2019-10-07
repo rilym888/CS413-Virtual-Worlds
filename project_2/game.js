@@ -9,7 +9,7 @@ var stage = new PIXI.Container();
 
 
 
-/// Menu ///
+/// Menu Stage ///
 var menuStage = new PIXI.Container();
 stage.addChild(menuStage);
 var menuBackground = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Backgrounds/background-menu.png"));
@@ -20,6 +20,7 @@ var playButton = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Buttons/button-p
 playButton.anchor.set(0.5);
 playButton.position.set(250,250);
 playButton.interactive = true;
+playButton.buttonMode = true;
 playButton.on('mousedown', playButtonHandler);
 menuStage.addChild(playButton);
 function playButtonHandler(e)
@@ -33,6 +34,7 @@ var instrButton = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Buttons/button-
 instrButton.anchor.set(0.5);
 instrButton.position.set(250,350);
 instrButton.interactive = true;
+instrButton.buttonMode = true;
 instrButton.on('mousedown', instrButtonHandler);
 menuStage.addChild(instrButton);
 function instrButtonHandler(e)
@@ -43,14 +45,15 @@ function instrButtonHandler(e)
 
 
 
-// Instructions
+/// Instructions Stage ///
 var instrStage = new PIXI.Container();
 var instrBackground = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Backgrounds/background-instructions.png"));
 instrStage.addChild(instrBackground);
 var returnButton = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Buttons/button-return.png"));
-returnButton.anchor.set(0.5);
-returnButton.position.set(250,350);
+returnButton.anchor.set(1.0);
+returnButton.position.set(WIDTH, HEIGHT);
 returnButton.interactive = true;
+returnButton.buttonMode = true;
 returnButton.on('mousedown', returnButtonHandler);
 instrStage.addChild(returnButton);
 function returnButtonHandler(e)
@@ -59,14 +62,50 @@ function returnButtonHandler(e)
   stage.addChild(menuStage);
 }
 
+var instrText = new PIXI.Text('instructions here');
+instrText.anchor.set(0.5);
+instrText.position.set(250,250);
+instrStage.addChild(instrText);
 
-// Game
+
+/// Game Stage ///
 var gameStage = new PIXI.Container();
 var gameBackground = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Backgrounds/background-tree.png"));
 gameStage.addChild(gameBackground);
+var appleTexture = new PIXI.Texture.fromImage("Assets/Sprites/apple.png");
+gameStage.addChild(apple);
 
 
+var numOfApples = 0;
 
+function spawnApples()
+{
+  if(numOfApples <= 5)
+  {
+    var apple = new PIXI.Sprite(appleTexture);
+    apple.anchor.set(0.5);
+    apple.x = 0;
+    apple.y = Math.floor(Math.random() * WIDTH);
+    stage.addChild(apple);
+    numOfArrows += 1;
+    appleFall(apple);
+  }
+}
+setInterval(spawnApples, 1000);
+
+function appleFall(apple)
+{
+  apple.y += 10;
+
+  /*if(apple.y >= HEIGHT)
+  {
+    gameStage.removeChild(apple);
+    numOfApples -= 1;
+  }*/
+
+  requestAnimationFrame(appleFall);
+}
+//setInterval(appleFall, 1000);
 
 
 
