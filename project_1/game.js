@@ -119,14 +119,4 @@ function animate()
     requestAnimationFrame(animate);
     renderer.render(stage);
 }
-
-// Code from http://creativejs.com/resources/requestanimationframe/
-function draw() {
-    setTimeout(function() {
-        requestAnimationFrame(draw);
-
-    }, 1000 / fps);
-}
-
 animate();
-draw();
