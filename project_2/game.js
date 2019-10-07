@@ -27,6 +27,7 @@ function playButtonHandler(e)
 {
   stage.removeChild(menuStage);
   stage.addChild(gameStage);
+  gameLoop();
 }
 
 // Instructions Button
@@ -73,45 +74,50 @@ var gameStage = new PIXI.Container();
 var gameBackground = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Backgrounds/background-tree.png"));
 gameStage.addChild(gameBackground);
 var appleTexture = new PIXI.Texture.fromImage("Assets/Sprites/apple.png");
+var apple = new PIXI.Sprite(appleTexture);
+apple.vx = 0;
+apple.vy = 0;
 gameStage.addChild(apple);
 
-
-var numOfApples = 0;
-
+/*var numOfApples = 0;
 function spawnApples()
 {
-  if(numOfApples <= 5)
+  if(numOfApples < 5)
   {
     var apple = new PIXI.Sprite(appleTexture);
     apple.anchor.set(0.5);
-    apple.x = 0;
-    apple.y = Math.floor(Math.random() * WIDTH);
-    stage.addChild(apple);
-    numOfArrows += 1;
-    appleFall(apple);
+    apple.x = Math.floor(Math.random() * WIDTH);
+    apple.y = 15;
+    gameStage.addChild(apple);
+    numOfApples += 1;
   }
 }
-setInterval(spawnApples, 1000);
+spawnApples();*/
 
-function appleFall(apple)
+
+function gameLoop()
 {
-  apple.y += 10;
+  requestAnimationFrame(gameLoop);
 
-  /*if(apple.y >= HEIGHT)
-  {
-    gameStage.removeChild(apple);
-    numOfApples -= 1;
-  }*/
+  apple.vx = 1;
+  apple.vy = 1;
 
-  requestAnimationFrame(appleFall);
+  apple.x += apple.vx;
+  apple.y += apple.vy;
+
+  renderer.render(stage);
 }
-//setInterval(appleFall, 1000);
+gameLoop();
 
 
+
+/*
 
 function animate()
 {
     requestAnimationFrame(animate);
+    //apple.y += 10;
     renderer.render(stage);
 }
 animate();
+*/
