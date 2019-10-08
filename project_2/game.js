@@ -27,7 +27,7 @@ function playButtonHandler(e)
 {
   stage.removeChild(menuStage); // leave main menu
   stage.addChild(gameStage);    // Go to game stage
-  setInterval(spawnApples, 1000);
+  setInterval(spawnApples, 1500);
 }
 
 // Add instructions Button
@@ -81,69 +81,97 @@ gameStage.addChild(gameBackground);
 var appleTexture = new PIXI.Texture.fromImage("Assets/Sprites/apple.png");
 /// End of game stage /////////////////
 
-/// Game logic ////////////////////////
-// gatherer
-var gatherer;
+/// Gameplay code ////////////////////////
+// Score ///////////////
+var score = 0;
+var scoreText = new PIXI.Text(': ' + score);
+scoreText.anchor.set(0.0, 1.0);
+scoreText.position.set(35, HEIGHT-5);
+gameStage.addChild(scoreText);
+// END of score ////////
 
-PIXI.loader
+
+
+// Gatherer ////////////
+var gatherer; // Add gatherer variable
+var gathererWIDTH = 100;  // Width of sprite bounds
+var gathererHEIGHT = 140; // Height of sprite bounds
+
+PIXI.loader   // load gatherer sprite sheet json
         .add("Assets/Sprites/gathererSpriteSheet.json")
         .load(gatherer);
 
+// Get gatherer frames and add it to the stage
 function gatherer()
 {
   var spriteSheet = PIXI.Loader.shared.resources["Assets/Sprites/gathererSpriteSheet.json"].spritesheet;
   gatherer = new PIXI.AnimatedSprite(spriteSheet.animations["gatherer"]);
-  gatherer.anchor.set(0.5, 1.0);
-  gatherer.position.set(WIDTH/2, HEIGHT-20);
+  gatherer.anchor.set(0.5);
+  gatherer.position.set(WIDTH/2, HEIGHT-gathererHEIGHT/2 - 50);
   gatherer.animationSpeed = 0.05;
-  gatherer.loop = false;
+  gatherer.loop = false;  // Want the animation to only play once per keypress.
   gameStage.addChild(gatherer);
 }
 
 // Gatherer controls
 function gathererKeyDownHander(e)
 {
-  if(e.keyCode == 32)
+  if(e.keyCode == 32) // spacebar
   {
-    gatherer.gotoAndPlay(0);
-    gatherer.onComplete(gatherer.gotoAndStop(0));
+    gatherer.gotoAndPlay(0); // Play animation from first frame.
+    //gatherer.onComplete(gatherer.gotoAndStop(0));
     //gatherer.gotoAndStop(0);
-    //gatherer
   }
 
-  if(e.keyCode == 65) { gatherer.position.x -= 10;} // A
-  if(e.keyCode == 68) { gatherer.position.x += 10; } // D
+  if(e.keyCode == 65) // A
+  {
+    gatherer.position.x -= 10; // Move left
+  }
+  if(e.keyCode == 68) // D
+  {
+    gatherer.position.x += 10; // Move right
+  }
 
+  // Loops gatherer back around the screen
   if(gatherer.position.x > WIDTH) {gatherer.position.x = 0;}
   if(gatherer.position.x < 0) {gatherer.position.x = WIDTH;}
 }
 document.addEventListener('keydown', gathererKeyDownHander);
+// END of gatherer /////
 
 
+// Apple sound /////////
+//PIXI.sound.add('pop', 'Assets/Sounds/pop.mp3');
+//const pop = PIXI.sound.Sound.from('Assets/Sounds/pop.mp3');
+//PIXI.sound.add('pop', 'Assets/Sounds/pop.mp3');
+//PIXI.sound.play('pop');
+//const sound = PIXI.sound.Sound.from('Assets/Sounds/pop.mp3');
+//sound.play();
+PIXI.sound.Sound.from({
+    url: 'Assets/Sounds/pop.mp3',
+    autoPlay: true,
+    loop: true,
+    complete: function() {
+        console.log('Sound finished');
+    }
+});
 
 
+// Apples //////////////
+var appleCount = 0;   // Keep track of how many apples are on screen.
+var appleWIDTH = 30;  // Width of sprite bounds
+var appleHEIGHT = 30; // Height of sprite bounds
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// Add an apple scprite next to the score.
+var scoreApple = new PIXI.Sprite(appleTexture);
+scoreApple.anchor.set(0.0, 1.0);
+scoreApple.position.set(5, HEIGHT-5);
+gameStage.addChild(scoreApple);
 
 // Creates the apples at the top of the screen at a random x position.
-var appleCount = 0;
 function spawnApples()
 {
-  if(appleCount < 3)
+  if(appleCount < 5) // Makes sure you don't get infinite apples.
   {
     var apple = new PIXI.Sprite(appleTexture);
     apple.anchor.set(0.5);
@@ -155,29 +183,25 @@ function spawnApples()
   }
 }
 
-/*function gameLoop()
-{
-  var apple = spawnApples();
-  new_x = 250;
-  new_y = HEIGHT;
-  createjs.Tween.get(apple.position).to({x: new_x, y: new_y}, 1000);
-}*/
-
 // Drops the apples toward the grown from their spawn location.
 function appleFall(apple)
 {
   setTimeout(function()
   {
-    /*if(apple.position.y >= gatherer.position.y-32 &&
-       apple.position.y <= gatherer.position.y+32 &&
-       apple.position.x-8 <= gatherer.position.x+32 &&
-       apple.position.x-8 >= gatherer.position.x-32)
+    // If apple hits near gatherer's basket, then remove it and increase score.
+    if(apple.position.y + appleHEIGHT/2 >= gatherer.position.y-gathererHEIGHT/2 &&
+       apple.position.y - appleHEIGHT/2 <= gatherer.position.y-gathererHEIGHT/2 + 30 &&
+       apple.position.x + appleWIDTH/2 <= gatherer.position.x+gathererWIDTH/2 &&
+       apple.position.x - appleWIDTH/2 >= gatherer.position.x-gathererWIDTH/2)
        {
-         gameStage.removeChild(apple);
-         appleCount -= 1;
+         gameStage.removeChild(apple);    // Get rid of caught apple
+         //pop.play();
+         score++;                         // Increment score
+         scoreText.text = ": " + score;   // Display new score
+         appleCount -= 1;                 // Reduce number of apples on screen by 1.
          return;
-       }*/
-    if(apple.y <= HEIGHT + 15)
+       }
+    if(apple.y >= HEIGHT + 15)  // If apple hits floor (uncaught).
     {
       gameStage.removeChild(apple);
       appleCount -= 1;
@@ -188,10 +212,12 @@ function appleFall(apple)
     {
       appleFall(apple);
     });
-    apple.y += 5;
+    apple.y += 2;           // Apple falls 2 pixels per upadte
+    apple.rotation += 0.1;  // Apple roates 0.1 per update
   }, 1000/60);
 }
-/// END of game logic /////////////////
+// END of Apples ///////
+/// END of gameplay code /////////////////
 
 function animate()
 {
