@@ -69,7 +69,7 @@ function returnButtonHandler(e)
 }
 
 // Instructions text
-var instrText = new PIXI.Text('instructions here');
+var instrText = new PIXI.Text('Press \'A\' to move left.\nPress \'D\' to move right.\nPress \'spacebar\' to catch apples.\nCatch as many apples as you can.\nIf 3 apples hit the ground, you lose.');
 instrText.anchor.set(0.5);
 instrText.position.set(250,250);
 instrStage.addChild(instrText);
@@ -90,21 +90,20 @@ var appleTexture = new PIXI.Texture.fromImage("Assets/Sprites/apple.png");
 var gameOverStage = new PIXI.Container();
 var gameOverBackground = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Backgrounds/background-gameover.png"));
 gameOverStage.addChild(gameOverBackground);
-/*
-var returnButton = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Buttons/button-return.png"));
-returnButton.anchor.set(1.0);
-returnButton.position.set(WIDTH, HEIGHT);
-returnButton.interactive = true;
-returnButton.buttonMode = true;
-returnButton.on('mousedown', returnButtonHandler);
-instrStage.addChild(returnButton);
+var gameOverReturnButton = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Buttons/button-return.png"));
+gameOverReturnButton.anchor.set(1.0);
+gameOverReturnButton.position.set(WIDTH, HEIGHT);
+gameOverReturnButton.interactive = true;
+gameOverReturnButton.buttonMode = true;
+gameOverReturnButton.on('mousedown', gameOverReturnButtonHandlder);
+gameOverStage.addChild(gameOverReturnButton);
 
 // Handles mouse click on return button
-function returnButtonHandler(e)
+function gameOverReturnButtonHandlder(e)
 {
-  stage.removeChild(instrStage);  // Leave instructions menu
-  stage.addChild(menuStage);      // Go to main menu
-}*/
+  stage.removeChild(gameOverStage); // Leave game over screen
+  stage.addChild(menuStage);        // Go to main menu
+}
 /// END of Game over Stage ////////////
 
 
