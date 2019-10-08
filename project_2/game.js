@@ -16,7 +16,7 @@ menuStage.addChild(menuBackground);
 // Add play Button
 var playButton = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Buttons/button-play.png"));
 playButton.anchor.set(0.5);
-playButton.position.set(250,250);
+playButton.position.set(250,200);
 playButton.interactive = true;
 playButton.buttonMode = true;
 playButton.on('mousedown', playButtonHandler);
@@ -33,7 +33,7 @@ function playButtonHandler(e)
 // Add instructions Button
 var instrButton = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Buttons/button-instructions.png"));
 instrButton.anchor.set(0.5);
-instrButton.position.set(250,350);
+instrButton.position.set(250,300);
 instrButton.interactive = true;
 instrButton.buttonMode = true;
 instrButton.on('mousedown', instrButtonHandler);
@@ -45,13 +45,29 @@ function instrButtonHandler(e)
   stage.removeChild(menuStage); // Leave main menu
   stage.addChild(instrStage);   // Go to instructions menu
 }
+
+// Add credits Button
+var creditButton = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Buttons/button-credits.png"));
+creditButton.anchor.set(0.5);
+creditButton.position.set(250,400);
+creditButton.interactive = true;
+creditButton.buttonMode = true;
+creditButton.on('mousedown', creditButtonHandler);
+menuStage.addChild(creditButton);
+
+// Handles mouse click on credits button
+function creditButtonHandler(e)
+{
+  stage.removeChild(menuStage); // Leave main menu
+  stage.addChild(creditStage);  // Go to credits screen
+}
 /// END of Menu stage /////////////////
 
 
 
 /// Instructions Stage ////////////////
 var instrStage = new PIXI.Container();
-var instrBackground = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Backgrounds/background-instructions.png"));
+var instrBackground = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Backgrounds/background-menu.png"));
 instrStage.addChild(instrBackground);
 var returnButton = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Buttons/button-return.png"));
 returnButton.anchor.set(1.0);
@@ -74,6 +90,43 @@ instrText.anchor.set(0.5);
 instrText.position.set(250,250);
 instrStage.addChild(instrText);
 /// END of instrucions Stage //////////
+
+
+
+/// Game Stage ////////////////////////
+var gameStage = new PIXI.Container();
+var gameBackground = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Backgrounds/background-tree.png"));
+gameStage.addChild(gameBackground);
+var appleTexture = new PIXI.Texture.fromImage("Assets/Sprites/apple.png");
+/// End of game stage /////////////////
+
+
+
+/// Credits Stage ////////////////////
+var creditStage = new PIXI.Container();
+var creditBackground = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Backgrounds/background-menu.png"));
+creditStage.addChild(creditBackground);
+var creditReturnButton = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Buttons/button-return.png"));
+creditReturnButton.anchor.set(1.0);
+creditReturnButton.position.set(WIDTH, HEIGHT);
+creditReturnButton.interactive = true;
+creditReturnButton.buttonMode = true;
+creditReturnButton.on('mousedown', creditReturnButtonHandler);
+creditStage.addChild(creditReturnButton);
+
+// Handles mouse click on return button
+function creditReturnButtonHandler(e)
+{
+  stage.removeChild(creditStage);  // Leave credits screen
+  stage.addChild(menuStage);       // Go to main menu
+}
+
+// Credits text
+var creditText = new PIXI.Text('Apple Catcher\n\nCreated by Riley McWilliams\n\nCS413: Virtual Worlds - Fall 2019');
+creditText.anchor.set(0.5);
+creditText.position.set(250,250);
+creditStage.addChild(creditText);
+/// END of Credits Stage //////////////
 
 
 
@@ -215,22 +268,22 @@ function appleFall(apple)
        apple.position.x - appleWIDTH/2 >= gatherer.position.x-gathererWIDTH/2)
        {
          gameStage.removeChild(apple);    // Get rid of caught apple
-         //pop.play();
+         //pop.play();                    // pLay catching sound effect
          score++;                         // Increment score
          scoreText.text = ": " + score;   // Display new score
-         appleCount -= 1;                 // Reduce number of apples on screen by 1.
+         appleCount--;                    // Reduce number of apples on screen by 1.
          return;
        }
     if(apple.y >= HEIGHT + 15)  // If apple hits floor (uncaught).
     {
       lives--;                         // lose 1 life
-      if(lives <= 0)                   // If all lives are lost
+      if(lives == 0)                   // If all lives are lost
       {
         stage.removeChild(gameStage);  // Leave gameplay screen
         stage.addChild(gameOverStage); // Go to game over screen.
       }
       gameStage.removeChild(apple);    // Get rid of caught apple
-      appleCount -= 1;                 // Reduce number of apples on screen by 1.
+      appleCount--;                    // Reduce number of apples on screen by 1.
       return;
     }
 
