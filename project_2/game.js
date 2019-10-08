@@ -48,6 +48,7 @@ function instrButtonHandler(e)
 /// END of Menu stage /////////////////
 
 
+
 /// Instructions Stage ////////////////
 var instrStage = new PIXI.Container();
 var instrBackground = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Backgrounds/background-instructions.png"));
@@ -74,6 +75,8 @@ instrText.position.set(250,250);
 instrStage.addChild(instrText);
 /// END of instrucions Stage //////////
 
+
+
 /// Game Stage ////////////////////////
 var gameStage = new PIXI.Container();
 var gameBackground = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Backgrounds/background-tree.png"));
@@ -81,9 +84,35 @@ gameStage.addChild(gameBackground);
 var appleTexture = new PIXI.Texture.fromImage("Assets/Sprites/apple.png");
 /// End of game stage /////////////////
 
+
+
+/// Game over Stage ///////////////////
+var gameOverStage = new PIXI.Container();
+var gameOverBackground = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Backgrounds/background-gameover.png"));
+gameOverStage.addChild(gameOverBackground);
+/*
+var returnButton = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Buttons/button-return.png"));
+returnButton.anchor.set(1.0);
+returnButton.position.set(WIDTH, HEIGHT);
+returnButton.interactive = true;
+returnButton.buttonMode = true;
+returnButton.on('mousedown', returnButtonHandler);
+instrStage.addChild(returnButton);
+
+// Handles mouse click on return button
+function returnButtonHandler(e)
+{
+  stage.removeChild(instrStage);  // Leave instructions menu
+  stage.addChild(menuStage);      // Go to main menu
+}*/
+/// END of Game over Stage ////////////
+
+
+
 /// Gameplay code ////////////////////////
 // Score ///////////////
 var score = 0;
+var lives = 3;
 var scoreText = new PIXI.Text(': ' + score);
 scoreText.anchor.set(0.0, 1.0);
 scoreText.position.set(35, HEIGHT-5);
@@ -147,14 +176,6 @@ document.addEventListener('keydown', gathererKeyDownHander);
 //PIXI.sound.play('pop');
 //const sound = PIXI.sound.Sound.from('Assets/Sounds/pop.mp3');
 //sound.play();
-PIXI.sound.Sound.from({
-    url: 'Assets/Sounds/pop.mp3',
-    autoPlay: true,
-    loop: true,
-    complete: function() {
-        console.log('Sound finished');
-    }
-});
 
 
 // Apples //////////////
@@ -203,8 +224,14 @@ function appleFall(apple)
        }
     if(apple.y >= HEIGHT + 15)  // If apple hits floor (uncaught).
     {
-      gameStage.removeChild(apple);
-      appleCount -= 1;
+      lives--;                         // lose 1 life
+      if(lives <= 0)                   // If all lives are lost
+      {
+        stage.removeChild(gameStage);  // Leave gameplay screen
+        stage.addChild(gameOverStage); // Go to game over screen.
+      }
+      gameStage.removeChild(apple);    // Get rid of caught apple
+      appleCount -= 1;                 // Reduce number of apples on screen by 1.
       return;
     }
 
