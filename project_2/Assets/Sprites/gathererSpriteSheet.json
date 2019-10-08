@@ -1,0 +1,39 @@
+{"frames": {
+
+"gatherer_01.png":
+{
+	"frame": {"x":0,"y":0,"w":100,"h":150},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":150},
+	"sourceSize": {"w":100,"h":150}
+},
+"gatherer_02.png":
+{
+	"frame": {"x":0,"y":150,"w":100,"h":150},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":150},
+	"sourceSize": {"w":100,"h":150}
+},
+"gatherer_03.png":
+{
+	"frame": {"x":0,"y":300,"w":100,"h":150},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":150},
+	"sourceSize": {"w":100,"h":150}
+}},
+"animations": {
+	"gatherer": ["gatherer_01.png","gatherer_02.png","gatherer_03.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "gathererSpriteSheet.png",
+	"format": "RGBA8888",
+	"size": {"w":100,"h":450},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:982e8e3847939ca0df117e67400f6361:b621e6fa03a50108b5137c4b4bf87745:34937d1aa898acfb501ba98614a7e584$"
+}
+}
