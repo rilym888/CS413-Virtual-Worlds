@@ -10,7 +10,8 @@ var stage = new PIXI.Container();
 /// Menu Stage ////////////////////////
 var menuStage = new PIXI.Container();
 stage.addChild(menuStage);
-
+var menuBackground = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Backgrounds/background-menu.png"));
+menuStage.addChild(menuBackground);
 
 // Add play Button
 var playButton = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Buttons/button-play.png"));
@@ -20,11 +21,6 @@ playButton.interactive = true;
 playButton.buttonMode = true;
 playButton.on('mousedown', playButtonHandler);
 menuStage.addChild(playButton);
-
-
-var menuBackground = new PIXI.Sprite(PIXI.Texture.fromImage("Assets/Backgrounds/background-menu.png"));
-menuStage.addChild(menuBackground);
-
 
 // Handles mouse click on play button
 function playButtonHandler(e)
